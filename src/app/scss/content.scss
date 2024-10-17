@@ -14,8 +14,8 @@
         &::before{
             content:"";
             display: block;
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             background-image: url("../img/main.png");
             background-size: contain;
             margin: 0 auto 8px;
@@ -27,7 +27,7 @@
     flex-wrap: wrap;
     width: 100%;
     max-width: 768px;
-    margin: 20px auto 0;
+    margin: 10px auto 0;
 
     section{
     width: 50%;
@@ -45,10 +45,9 @@
 div{
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 8px;
 
     &>input{
-     
         border: 1px solid #ddd;
         width: 80px;
         border-radius: 20px;
@@ -118,12 +117,18 @@ button{
 }
     }
 
-    .radio_box{
+    .option_box{
         width: 200px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap:10px;
+        gap: 6px;
+
+        label{
+            &:nth-child(1){
+                color: #999;
+            }
+        }
     }
 
     .total{
@@ -187,7 +192,7 @@ button{
             width: 200px;
         }
     
-        .radio_box{
+        .option_box{
             width: 200px;
             display: flex;
             flex-direction: column;

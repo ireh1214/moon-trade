@@ -19,6 +19,9 @@ const Calculator: React.FC = () => {
     null
   );
 
+  // 전체 금액을 15% 증가시키는 상태 추가
+  const [increaseTotal, setIncreaseTotal] = useState<boolean>(false);
+
   const calculateTotal = () => {
     const baseTotal = items.reduce(
       (total, item) =>
@@ -37,17 +40,31 @@ const Calculator: React.FC = () => {
     // 선택된 보증서에 따라 총 가격 조정
     const totalWithBonus = baseTotal + totalBonus;
 
+    let finalTotal = totalWithBonus;
+
     if (selectedCertificate === "A") {
-      return totalWithBonus * 1; // 100%
-    }
-    if (selectedCertificate === "B") {
-      return totalWithBonus * 1.5; // 150%
-    }
-    if (selectedCertificate === "C") {
-      return totalWithBonus * 2; // 200%
+      finalTotal *= 1; // 100%
+    } else if (selectedCertificate === "B") {
+      finalTotal += totalWithBonus * 0.45; // 45% 증가
+    } else if (selectedCertificate === "C") {
+      finalTotal += totalWithBonus * 0.6; // 60% 증가
+    } else if (selectedCertificate === "D") {
+      finalTotal += totalWithBonus * 0.75; // 75% 증가
+    } else if (selectedCertificate === "E") {
+      finalTotal += totalWithBonus * 1.5; // 150% 증가
     }
 
-    return totalWithBonus; // 기본값
+    // 전체 금액 증가 여부 체크
+    if (increaseTotal) {
+      finalTotal += totalWithBonus * 0.15; // 15% 증가
+    }
+
+    return finalTotal; // 최종 금액 반환
+  };
+
+  // 15% 증가 버튼 클릭 핸들러
+  const handleIncreaseTotal = () => {
+    setIncreaseTotal((prev) => !prev);
   };
 
   const handleCertificateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -299,7 +316,7 @@ const Calculator: React.FC = () => {
           ))}
           <button onClick={addBonusField}>Input 추가</button>
         </div>
-        <div className="radio_box">
+        <div className="option_box">
           <label>
             <input
               type="radio"
@@ -307,7 +324,7 @@ const Calculator: React.FC = () => {
               checked={selectedCertificate === "A"}
               onChange={handleCertificateChange}
             />
-            없어요 ㅜㅜ
+            전 보증서 없고 거지예요
           </label>
           <label>
             <input
@@ -316,7 +333,7 @@ const Calculator: React.FC = () => {
               checked={selectedCertificate === "B"}
               onChange={handleCertificateChange}
             />
-            임고보 (150%)
+            오고보 (45%)
           </label>
           <label>
             <input
@@ -325,7 +342,33 @@ const Calculator: React.FC = () => {
               checked={selectedCertificate === "C"}
               onChange={handleCertificateChange}
             />
-            특임보 (200%)
+            고고보 (60%)
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="D"
+              checked={selectedCertificate === "D"}
+              onChange={handleCertificateChange}
+            />
+            임고보 (75%)
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="E"
+              checked={selectedCertificate === "E"}
+              onChange={handleCertificateChange}
+            />
+            임특보 (150%)
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={increaseTotal}
+              onChange={handleIncreaseTotal} // 체크박스 클릭 시 상태 토글
+            />
+            교역마 1랭!
           </label>
         </div>
 
