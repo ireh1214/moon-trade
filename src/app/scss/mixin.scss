@@ -1,0 +1,97 @@
+@charset 'utf-8';
+/*---------------------------------
+    File   : mixin.scss
+    Date   : 2024.09.23
+/*---------------------------------*/
+
+/*
+scroll 
+ */
+
+ $main100: #2281FF;
+ $main200: #D1E5FF;
+
+
+@mixin scrollbar($bgColor: $scrollbar) {
+  width: 4px;
+  height: 4px;
+  background: $bgColor;
+}
+
+//::-webkit-scrollbar-thumb
+@mixin scrollbar-thumb($bgColor: $scrollThumb) {
+  height: 15px;
+  background: $bgColor;
+  border-radius: 0px;
+}
+
+/* hide */
+@mixin txtHide {
+  text-indent: -999999px;
+  font-size: 0;
+}
+
+/* text ellipsis */
+@mixin ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@mixin ellipsis_l4($wlc: 4) {
+  display: -webkit-box;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-all;
+  -webkit-line-clamp: $wlc;
+  -webkit-box-orient: vertical;
+}
+
+/* 
+flex
+*/
+@mixin flex_between {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin flex_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex_between_column {
+  @include flex_between;
+  flex-direction: column;
+}
+
+@mixin flex_center_column {
+  @include flex_center;
+  flex-direction: column;
+}
+
+@mixin flex_item_column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@mixin flex_end_column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+@mixin flex_around {
+  display: flex;
+  justify-content: space-around;
+}
+
+@mixin flex_start {
+  display: flex;
+  justify-content: flex-start;
+}
+
