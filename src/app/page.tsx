@@ -42,6 +42,7 @@ const Calculator: React.FC = () => {
     return totalWithBonus; // 기본값
   };
 
+
   const handleCertificateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedCertificate(e.target.value); // 선택된 보증서 저장
   };
@@ -60,6 +61,10 @@ const Calculator: React.FC = () => {
 
   // 보너스 값 추가/제거 핸들러
   const handleBonusChange = (index: number, value: string) => {
+    if (Number(value) >= 1000000000) {
+      alert("얼마나 많이 입력하려고 그러세요!!");
+    }
+
     const newBonusValues = [...bonusValues];
     newBonusValues[index] = value;
     setBonusValues(newBonusValues);
