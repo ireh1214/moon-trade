@@ -7,7 +7,7 @@
     height: 100vh;
     overflow-x: hidden;
     overflow-y: scroll;
-    padding: 20px 0 50px;
+    padding: 12px 0 30px;
     h1{
         font-size: 20px;
         text-align: center;
@@ -25,12 +25,12 @@
   .section_wrap{
     display: flex;
     flex-wrap: wrap;
-    gap:20px;
-    max-width: 700px;
-    margin: 40px auto 0;
+    width: 100%;
+    max-width: 768px;
+    margin: 20px auto 0;
 
     section{
-    width: calc(50% - 20px);
+    width: 50%;
     border: 1px solid #c2c2c2;
     background-color: #fff;
     border-radius: 20px;
@@ -47,9 +47,27 @@ div{
     align-items: center;
     margin-top: 10px;
 
+    &>input{
+     
+        border: 1px solid #ddd;
+        width: 80px;
+        border-radius: 20px;
+        font-size: 14px;
+        padding: 8px 12px;
+        &::placeholder{
+            color: #ddd;
+        }
+        &:active{
+            border: 1px solid #000;
+        }
+    }
+
 label{
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.5px;
 &:nth-child(3){
-    margin-left: auto;
+   margin: 0px 8px 0px auto;
     input{
         &[type="checkbox"]{
 

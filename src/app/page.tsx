@@ -7,6 +7,11 @@ const Calculator: React.FC = () => {
     items.reduce((acc, item) => ({ ...acc, [item.name]: 0 }), {})
   );
 
+  // 지역별 가격 조정 상태 관리
+  const [regionalPriceAdjustments, setRegionalPriceAdjustments] = useState<{
+    [key: string]: number;
+  }>(items.reduce((acc, item) => ({ ...acc, [item.name]: 0 }), {}));
+
   const [bonusValues, setBonusValues] = useState<string[]>([""]); // 여러 개의 보너스 값을 관리하는 배열
 
   // 보증서 상태 (하나만 선택되도록 변경)
@@ -16,7 +21,10 @@ const Calculator: React.FC = () => {
 
   const calculateTotal = () => {
     const baseTotal = items.reduce(
-      (total, item) => total + quantities[item.name] * item.price,
+      (total, item) =>
+        total +
+        quantities[item.name] *
+          (item.price + (regionalPriceAdjustments[item.name] || 0)),
       0
     );
 
@@ -41,7 +49,6 @@ const Calculator: React.FC = () => {
 
     return totalWithBonus; // 기본값
   };
-
 
   const handleCertificateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedCertificate(e.target.value); // 선택된 보증서 저장
@@ -72,6 +79,13 @@ const Calculator: React.FC = () => {
 
   const addBonusField = () => {
     setBonusValues((prev) => [...prev, ""]); // 새로운 보너스 필드 추가
+  };
+
+  const handleRegionalPriceChange = (itemName: string, value: string) => {
+    setRegionalPriceAdjustments((prev) => ({
+      ...prev,
+      [itemName]: Number(value)
+    }));
   };
 
   const kTypeItems = items.filter((item) => item.type === "K");
@@ -118,6 +132,14 @@ const Calculator: React.FC = () => {
                 />
                 최대
               </label>
+              <input
+                type="number"
+                value={regionalPriceAdjustments[item.name] || ""}
+                onChange={(e) =>
+                  handleRegionalPriceChange(item.name, e.target.value)
+                }
+                placeholder="마을별 시세"
+              />
             </div>
           ))}
         </section>
@@ -156,6 +178,15 @@ const Calculator: React.FC = () => {
                 />
                 최대
               </label>
+
+              <input
+                type="number"
+                value={regionalPriceAdjustments[item.name] || ""}
+                onChange={(e) =>
+                  handleRegionalPriceChange(item.name, e.target.value)
+                }
+                placeholder="마을별 시세"
+              />
             </div>
           ))}
         </section>
@@ -194,6 +225,14 @@ const Calculator: React.FC = () => {
                 />
                 최대
               </label>
+              <input
+                type="number"
+                value={regionalPriceAdjustments[item.name] || ""}
+                onChange={(e) =>
+                  handleRegionalPriceChange(item.name, e.target.value)
+                }
+                placeholder="마을별 시세"
+              />
             </div>
           ))}
         </section>
@@ -232,6 +271,14 @@ const Calculator: React.FC = () => {
                 />
                 최대
               </label>
+              <input
+                type="number"
+                value={regionalPriceAdjustments[item.name] || ""}
+                onChange={(e) =>
+                  handleRegionalPriceChange(item.name, e.target.value)
+                }
+                placeholder="마을별 시세"
+              />
             </div>
           ))}
         </section>
@@ -239,7 +286,7 @@ const Calculator: React.FC = () => {
 
       <div className="bottom">
         <div className="input_box">
-          <p>마을별 이익(직접입력):</p>
+          <p>더 더할거 있나여?(직접입력):</p>
           {bonusValues.map((bonus, index) => (
             <div key={index}>
               <input
