@@ -211,9 +211,6 @@ button{
 
 }
 
-
-
-
 @media only screen and (max-width:699px) {
     .wrap{
         padding: 10px 0 10vh;
@@ -276,10 +273,6 @@ button{
 
 }
 
-
-
-
-
 .swal2-container{
     button{
         background-color: #000 !important;
@@ -321,5 +314,92 @@ button{
         .swal2-image{
           
         }
+    }
+}
+
+
+
+.filter_wrap{
+    width: 100%;
+    max-width: 767px;
+    margin: 0 auto;
+
+    section{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h3{
+            font-weight: 800;
+            height: 50px;
+            background-color: #fff;
+            position: sticky;
+            top:0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .color_search{
+            max-width: 300px;
+            width: 100%;
+            margin: 20px auto 0;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 8px 16px 8px 32px;
+            &:focus{
+                border: 1px solid #115389;
+            }
+        }
+
+        .item_list{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap:10px;
+            margin: 20px auto;
+
+            li{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 180px;
+                border: 1px solid #eee;
+
+                p{
+                    text-align: center;
+                    margin: 10px auto 8px;
+                }
+                img{
+                    width: 120px;
+                    height: 120px;
+                    margin: 0 auto;
+                }
+
+                .color_list{
+                    border-top: 1px solid #eee;
+                    li{
+                        display: flex;
+                        flex-wrap: nowrap;
+                        align-items: center;
+                        justify-content: center;
+                        border: none;
+                        margin: 6px 0;
+                        font-size: 14px;
+                        letter-spacing: -0.5px;
+
+                        .bg{
+                            width: 16px;
+                            height: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
