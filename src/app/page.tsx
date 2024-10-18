@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import items from "./items";
 import ItemGroup from "./ItemGroup";
 import Swal from "sweetalert2";
-import character from "./img/character.png";
 
 const Calculator: React.FC = () => {
   const [quantities, setQuantities] = useState<{ [key: string]: number }>(
@@ -47,7 +46,6 @@ const Calculator: React.FC = () => {
     if (Number(value) >= 1000000000) {
       alert("얼마나 많이 입력하려고 그러세요!!");
     }
-
     const newBonusValues = [...bonusValues];
     newBonusValues[index] = value;
     setBonusValues(newBonusValues);
@@ -156,14 +154,14 @@ const Calculator: React.FC = () => {
 
   // 모달 --
 
-  const alert = () => {
+  const alertHandler = () => {
     Swal.fire({
       html: `
-      <div class ="img"></div>
-     <a href="https://x.com/Luniclemabi" autofocus> 문의사항은 여기로 부탁드립니다!</a>
-    
-    © 본 페이지는 리액트로 구성되어 있고, 2024년 10월에 만들어졌습니다.
-    `,
+        <div class ="img"></div>
+        <a href="https://x.com/Luniclemabi" autofocus> 문의사항은 여기로 부탁드립니다!</a>
+        <br /><br />
+        © 본 페이지는 리액트로 구성되어 있고, 2024년 10월에 만들어졌습니다.
+      `,
       imageAlt: "이미지",
       confirmButtonText: "그래요!"
     });
@@ -171,7 +169,7 @@ const Calculator: React.FC = () => {
 
   return (
     <div className="wrap">
-      <h1 onClick={alert}>
+      <h1 onClick={alertHandler}>
         마비노기 물물교역 계산기 <span>/ @LT루니클</span>{" "}
       </h1>
       <div className="section_wrap">
