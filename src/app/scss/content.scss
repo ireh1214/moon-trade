@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
 
 .wrap{
     display: flex;
@@ -9,8 +10,18 @@
     overflow-y: scroll;
     padding: 12px 0 30px;
     h1{
-        font-size: 20px;
+
+        font-family: "Gaegu", sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: -3px;
         text-align: center;
+span{
+    font-size: 13px;
+    font-weight: 200;
+    letter-spacing: -1px;
+}
+
         &::before{
             content:"";
             display: block;
@@ -38,25 +49,26 @@
     padding: 20px;
 
     h3{
-        font-weight: 800;
-        font-size: 18px;
-        margin-bottom: 10px;
+        font-family: "Gaegu", sans-serif;
+        letter-spacing: -3px;
+        font-size: 20px;
+        margin-bottom: 6px;
     }
 div{
     display: flex;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 4px;
 
     &>input{
         border: 1px solid #ddd;
-        width: 80px;
+        width: 70px;
         border-radius: 20px;
         font-size: 14px;
-        padding: 8px 12px;
+        padding: 6px 12px;
         &::placeholder{
             color: #ddd;
         }
-        &:active{
+        &:focus{
             border: 1px solid #000;
         }
     }
@@ -81,24 +93,24 @@ select{
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 }
-
-
     }
   }
     
-
   .bottom{
-    width: 700px;
+    border-top: 1px dashed #000;
+    width: 767px;
     display: flex;
-    gap:20px;
-  flex-wrap: wrap;
+    gap: 20px;
+  flex-wrap: nowrap;
    justify-content: center;
     margin: 20px auto 0;
+    padding-top: 20px;
 
     .input_box{
-        width: 200px;
+        width: 160px;
 p{
 margin-bottom: 8px;
+font-size: 14px;
 }
 div{
     margin-top: 8px;
@@ -118,13 +130,13 @@ button{
     }
 
     .option_box{
-        width: 200px;
+        width: auto;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        gap: 6px;
+        gap: 4px;
 
         label{
+            font-size: 14px;
             &:nth-child(1){
                 color: #999;
             }
@@ -132,15 +144,68 @@ button{
     }
 
     .total{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 260px;
+        width: 300px;
         font-size: 14px;
         b{
             font-size: 40px;
             line-height: 60px;
+            font-weight: 800;
         }
+
+        .total_list{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap:4px;
+            li{
+                display: flex;
+                align-items: center;
+                gap:10px;
+                padding: 4px 12px 4px 16px;
+                background-color: #fff;
+                border-radius: 30px;
+
+                input{
+                    &.m_name{
+                        width: auto;
+                        max-width: 90px;
+                        border: 1px solid #ccc;
+                        font-size: 14px;
+                        border-radius: 4px;
+
+                        &::placeholder{
+                            color:#ccc;
+                        }
+                    }
+                }
+
+                span{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 20px;
+                    height: 20px;
+                    background-image: url("../img/close.png");
+                    background-size: cover;
+                    text-indent: -9999px;
+                }
+            }
+        }
+    }
+    .total_option{
+display: flex;
+flex-direction: column;
+gap:4px;
+
+button{
+    width: 94px;
+
+    font-size: 14px;
+    background-color: #363030;
+    color: #fff;
+    border-radius: 4px;
+    padding: 12px 8px;
+}
     }
   }
 
@@ -150,8 +215,6 @@ button{
 
 
 @media only screen and (max-width:699px) {
-    
-
     .wrap{
         padding: 10px 0 10vh;
         h1{
@@ -203,7 +266,7 @@ button{
         .total{
             width: 100%;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
             text-align: center;
         }
@@ -211,4 +274,52 @@ button{
     
     }
 
+}
+
+
+
+
+
+.swal2-container{
+    button{
+        background-color: #000 !important;
+
+        &:active{
+            
+            outline: none;
+        }
+        &:focus{
+            outline: none;
+        }
+    }
+
+    .swal2-popup {
+            max-width: 420px;
+            width: 100%;
+    }
+    .swal2-html-container{
+        font-size: 13px;
+        color: #ccc;
+        letter-spacing: -0.5px;
+
+        div{
+            width: 350px;
+            height: 200px;
+            background-image: url("../img/character.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 18px;
+            margin: 10px auto 18px;
+        }
+
+        a{
+            font-size: 16px;
+            color: #115389;
+            margin-bottom: 10px;
+        }
+        .swal2-image{
+          
+        }
+    }
 }
