@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import supabase from "../supabase/supabaseClient";
 
+
+// User 타입 정의
 interface User {
-  id: string;
-  username: string;
-  profile_picture: string;
-  color_code: string;
-  color_desc: string;
+  id: string; // 사용자 ID (UUID 형식)
+  username: string; // 사용자 이름
+  profile_picture: string; // 프로필 이미지 URL
+  color_code: string; // 색상 코드
+  color_desc: string; // 색상 설명
 }
 
 const AddUserForm: React.FC = () => {
@@ -21,6 +23,7 @@ const AddUserForm: React.FC = () => {
 
   const handleImageUpload = async (file: File): Promise<string | null> => {
     const fileName = `${Date.now()}_${file.name}`;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error } = await supabase.storage
       .from("profile-pictures")
       .upload(fileName, file);
@@ -31,16 +34,12 @@ const AddUserForm: React.FC = () => {
       return null;
     }
 
-    console.log("Upload successful, data:", data); // 업로드 성공 시 로그 추가
-
     // 업로드된 파일의 퍼블릭 URL 가져오기
     const { data: urlData } = supabase.storage
       .from("profile-pictures")
       .getPublicUrl(fileName);
 
     // URL이 제대로 가져와졌는지 확인
-    console.log("URL Data:", urlData);
-
     if (!urlData || !urlData.publicUrl) {
       console.error("Error fetching public URL: urlData is undefined or empty");
       setErrorMessage(
@@ -65,14 +64,18 @@ const AddUserForm: React.FC = () => {
         return;
       }
 
-      const { data, error } = await supabase.from<User>("users").insert([
-        {
-          username,
-          profile_picture: imageUrl, // 이미지 URL 저장
-          color_code: colorCode,
-          color_desc: colorDesc
-        }
-      ]);
+      // 새 사용자 데이터
+      const newUser: User = {
+        id: uuidv4(), // UUID를 사용하여 새로운 ID 생성
+        username,
+        profile_picture: imageUrl,
+        color_code: colorCode,
+        color_desc: colorDesc
+      };
+
+      // 사용자 추가
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { data, error } = await supabase.from("users").insert([newUser]); // 타입 지정 없이 사용
 
       if (error) {
         setErrorMessage("Error adding user: " + error.message);
@@ -152,3 +155,7 @@ const AddUserForm: React.FC = () => {
 };
 
 export default AddUserForm;
+function uuidv4(): string {
+  throw new Error("Function not implemented.");
+}
+

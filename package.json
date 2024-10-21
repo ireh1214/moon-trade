@@ -17,7 +17,8 @@
     "react-dom": "^18",
     "sass": "^1.80.1",
     "supabase": "^1.204.3",
-    "sweetalert2": "^11.14.3"
+    "sweetalert2": "^11.14.3",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
