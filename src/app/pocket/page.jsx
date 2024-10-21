@@ -9,7 +9,7 @@ const ItemList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const channelRequests = Array.from({ length: 10 }, (_, index) => {
+        const channelRequests = Array.from({ length: 20 }, (_, index) => {
           const channel = index + 1; // 채널 번호
           return axios.get(
             `https://open.api.nexon.com/mabinogi/v1/npcshop/list?npc_name=%EC%83%81%EC%9D%B8%20%EB%88%84%EB%88%84&server_name=%EB%A5%98%ED%8A%B8&channel=${channel}`,
