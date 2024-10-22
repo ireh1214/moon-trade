@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import AddUserModal from "../../components/AddUserModal";
-import Card from "../../components/Card";
+import Card from "../../components/AdminCard";
 
 const Page: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

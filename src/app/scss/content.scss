@@ -511,8 +511,6 @@ padding: 0px 20px 100px;
                         display: block;
                         width: 52px;
                         height: 52px;
-                        background-repeat: no-repeat;
-                        background-size: contain;
                     }
                 }
             }
@@ -522,12 +520,18 @@ padding: 0px 20px 100px;
             flex-direction: column;
             gap:4px;
             margin-top: 10px;
+            height: 68px;
+            overflow-y: scroll;
             li{
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-size: 14px;
                 gap:8px;
+
+                &:nth-child(2){
+                    float: left;
+                }
     
                 span{
                     // 
@@ -566,6 +570,8 @@ padding: 0px 20px 100px;
                   &:nth-child(2){
                     &::before{
                         background-image: url("../img/icon_e.png");
+                        background-repeat: no-repeat;
+                        background-size: contain;
                     }
                   }
                 }
@@ -581,6 +587,8 @@ padding: 0px 20px 100px;
                           &:nth-child(2){
                             &::before{
                                 background-image: url("../img/icon_m.png");
+                                background-repeat: no-repeat;
+                                background-size: contain;
                             }
                           }
                         }
@@ -594,6 +602,8 @@ padding: 0px 20px 100px;
                           &:nth-child(2){
                             &::before{
                                 background-image: url("../img/eggspider.png");
+                                background-repeat: no-repeat;
+                                background-size: contain;
                             }
                           }
                         }
@@ -607,6 +617,8 @@ padding: 0px 20px 100px;
                           &:nth-child(2){
                             &::before{
                                 background-image: url("../img/icon_s.png");
+                                background-repeat: no-repeat;
+                                background-size: contain;
                             }
                           }
                         }
@@ -631,7 +643,8 @@ padding: 0px 20px 100px;
 width: 90%;
 min-width: 260px;
     max-width: 400px;
-    height: 300px;
+    min-height: 300px;
+    max-height: 700px;
     border: 1px solid #ccc;
     z-index: 10;
     background-color: #fff;
@@ -711,7 +724,8 @@ margin-left: 20px;
     width: 90%;
     min-width: 260px;
     max-width: 400px;
-    height: 500px;
+    min-height: 500px;
+    max-height: 700px;
     display: flex;
     flex-direction: column;
     border: 1px solid #ccc;
@@ -737,11 +751,12 @@ p{
     }
 
 form{
-    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 20px;
+    height: 410px;
+    gap: 24px;
+    padding-top: 20px;
+    overflow-y:scroll;
 
     label{
         display: flex;
@@ -758,9 +773,13 @@ form{
             &[type="text"] {
               border: 1px solid #ddd;
               border-radius: 30px;
-              padding: 8px 12px;
+              padding: 12px 16px;
 &::placeholder{
     color: #ccc;
+}
+&:focus{
+    outline: #fff;
+    border: 1px solid #000;
 }
             }
             &[type="file"] {
@@ -774,16 +793,23 @@ form{
           
 
     }
-    button{
-        margin-top: auto;
-        height: 50px;
-        width: 100%;
-        background-color: #222;
-        color: #fff;
 
-        &:hover{
-            background-color: #000;
-        }
+
+      .btn_group{
+        display: flex;
+        height: 50px;
+        margin-top: auto;
+
+
+        button{
+            width: 50%;
+            height: 50px;
+            background-color: #222;
+            color: #fff;
+            &:hover{
+                background-color: #000;
+            }
+          }
       }
 }
 

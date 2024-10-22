@@ -4,12 +4,16 @@ import { v4 as uuidv4 } from "uuid"; // uuidv4 가져오기
 import supabase from "../supabase/supabaseClient";
 
 // User 타입 정의
+interface Color {
+  color_code: string; // 색상 코드
+  color_desc: string; // 색상 설명
+}
+
 interface User {
   id: string; // 사용자 ID (UUID 형식)
   username: string; // 사용자 이름
   profile_picture: string; // 프로필 이미지 URL
-  color_code: string; // 색상 코드
-  color_desc: string; // 색상 설명
+  colors: Color[]; // 색상 배열
   job: string;
 }
 
@@ -20,9 +24,9 @@ interface AddUserModalProps {
 
 const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, setIsOpen }) => {
   const [username, setUsername] = useState<string>("");
-  const [colorCode, setColorCode] = useState<string>("");
-  const [colorDesc, setColorDesc] = useState<string>("");
   const [userJob, setUserJob] = useState<string>("");
+  const [colorCodes, setColorCodes] = useState<string[]>([""]); // 초기값으로 빈 문자열을 가진 배열 설정
+  const [colorDescs, setColorDescs] = useState<string[]>([""]); // 초기값으로 빈 문자열을 가진 배열 설정
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
   const handleImageUpload = async (file: File): Promise<string | null> => {
@@ -59,8 +63,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, setIsOpen }) => {
         id: uuidv4(), // uuidv4 사용하여 UUID 생성
         username,
         profile_picture: imageUrl,
-        color_code: colorCode,
-        color_desc: colorDesc,
+        colors: colorCodes.map((code, index) => ({
+          color_code: code,
+          color_desc: colorDescs[index]
+        })), // 색상 정보를 배열로 설정
         job: userJob
       };
 
@@ -72,13 +78,18 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, setIsOpen }) => {
       } else {
         alert("성공! 이제 새로고침을 한번 해주세요.");
         setUsername("");
-        setColorCode("");
-        setColorDesc("");
+        setColorCodes([]);
+        setColorDescs([]);
         setUserJob("");
         setProfilePicture(null);
         setIsOpen(false);
       }
     }
+  };
+
+  const handleAddColor = () => {
+    setColorCodes([...colorCodes, ""]); // 빈 문자열로 새 색상 코드 추가
+    setColorDescs([...colorDescs, ""]); // 빈 문자열로 새 색상 설명 추가
   };
 
   return isOpen ? (
@@ -96,7 +107,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, setIsOpen }) => {
             <input
               type="text"
               value={username}
-              placeholder="인게임 닉네임 입력"
+              placeholder="인게임 닉네임 입력!"
               onChange={(e) => setUsername(e.target.value)}
               required
             />
@@ -112,28 +123,38 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, setIsOpen }) => {
               required
             />
           </label>
-
-          <label>
-            색 코드:
-            <input
-              type="text"
-              value={colorCode}
-              placeholder="#빼고 ffffff 요렇게"
-              onChange={(e) => setColorCode(e.target.value)}
-              required
-            />
-          </label>
-
-          <label>
-            색 명칭:
-            <input
-              type="text"
-              value={colorDesc}
-              placeholder="리블, 리화, 다크초코"
-              onChange={(e) => setColorDesc(e.target.value)}
-              required
-            />
-          </label>
+          {colorCodes.map((_, index) => (
+            <div key={index}>
+              <label>
+                색 코드:
+                <input
+                  type="text"
+                  value={colorCodes[index]}
+                  placeholder="#빼고 ffffff 요렇게"
+                  onChange={(e) => {
+                    const newColorCodes = [...colorCodes];
+                    newColorCodes[index] = e.target.value; // 현재 색상 코드 업데이트
+                    setColorCodes(newColorCodes);
+                  }}
+                  required
+                />
+              </label>
+              <label>
+                색 명칭:
+                <input
+                  type="text"
+                  value={colorDescs[index]}
+                  placeholder="리블, 리화, 다크초코..."
+                  onChange={(e) => {
+                    const newColorDescs = [...colorDescs];
+                    newColorDescs[index] = e.target.value; // 현재 색상 설명 업데이트
+                    setColorDescs(newColorDescs);
+                  }}
+                  required
+                />
+              </label>
+            </div>
+          ))}
 
           <label>
             프로필 사진:
@@ -146,8 +167,12 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, setIsOpen }) => {
               required
             />
           </label>
-
-          <button type="submit">멤버 추가하기</button>
+          <div className="btn_group">
+            <button type="button" onClick={handleAddColor}>
+              지향색 추가
+            </button>
+            <button type="submit">다 됐어요</button>
+          </div>
         </form>
       </div>
       <div className="modal_bg" onClick={() => setIsOpen(false)}></div>
