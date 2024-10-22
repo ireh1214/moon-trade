@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import supabase from "../supabase/supabaseClient";
+import { PostgrestError } from "@supabase/postgrest-js";
 
 // User 타입 정의
 interface Color {
@@ -20,6 +21,7 @@ const Card: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [username, setUsername] = useState<string>("");
+  const [userJob, setUserJob] = useState<string>("");
   const [colorCodes, setColorCodes] = useState<string[]>([]); // 색상 코드 배열
   const [colorDescs, setColorDescs] = useState<string[]>([]); // 색상 설명 배열
 
@@ -31,10 +33,12 @@ const Card: React.FC = () => {
   }, []);
 
   const fetchUsers = async () => {
-    const { data, error } = (await supabase.from("users").select("*")) as {
-      data: User[];
-      error: any;
-    };
+    const {
+      data,
+      error
+    }: { data: User[] | null; error: PostgrestError | null } = await supabase
+      .from("users")
+      .select("*");
 
     if (error) {
       console.error("Error fetching users:", error);
@@ -46,6 +50,7 @@ const Card: React.FC = () => {
   const handleEditClick = (user: User) => {
     setSelectedUser(user);
     setUsername(user.username);
+    setUserJob(user.job);
     setProfilePicture(null); // 이미지 초기화
 
     // 모든 색상 정보를 가져옵니다.
@@ -114,7 +119,8 @@ const Card: React.FC = () => {
       .update({
         username,
         colors: updatedColors, // 색상 배열 업데이트
-        profile_picture: imageUrl // 새 URL 적용
+        profile_picture: imageUrl, // 새 URL 적용
+        job: userJob
       })
       .eq("id", selectedUser.id); // 수정할 사용자 ID
 
@@ -128,7 +134,8 @@ const Card: React.FC = () => {
                 ...user,
                 username,
                 colors: updatedColors, // 새 색상 배열 반영
-                profile_picture: imageUrl // 새 이미지 URL 반영
+                profile_picture: imageUrl, // 새 이미지 URL 반영
+                job: userJob
               }
             : user
         )
@@ -139,6 +146,7 @@ const Card: React.FC = () => {
       setColorCodes([]); // 색상 코드 초기화
       setColorDescs([]); // 색상 설명 초기화
       setProfilePicture(null);
+      setUserJob("");
     }
     alert("수정 완료!");
   };
@@ -220,6 +228,14 @@ const Card: React.FC = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+              />
+            </label>
+            <label>
+              직업:
+              <input
+                type="text"
+                value={userJob}
+                onChange={(e) => setUserJob(e.target.value)}
               />
             </label>
 
