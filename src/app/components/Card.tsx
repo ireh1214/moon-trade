@@ -9,14 +9,17 @@ interface User {
   profile_picture: string; // 프로필 이미지 URL
   color_code: string; // 색상 코드
   color_desc: string; // 색상 설명
+  job: string;
 }
 
 const Card: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [username, setUsername] = useState<string>("");
+  const [colorCode, setColorCode] = useState<string>("");
   const [colorDesc, setColorDesc] = useState<string>("");
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [showEditButton, setShowEditButton] = useState<string | null>(null); // 수정 버튼 상태 관리
 
   useEffect(() => {
     fetchUsers();
@@ -41,6 +44,7 @@ const Card: React.FC = () => {
     setSelectedUser(user);
     setUsername(user.username);
     setColorDesc(user.color_desc);
+    setColorCode(user.color_code);
     setProfilePicture(null); // 이미지 초기화
   };
 
@@ -91,6 +95,7 @@ const Card: React.FC = () => {
       .update({
         username,
         color_desc: colorDesc,
+        color_code: colorCode,
         profile_picture: imageUrl // 새 URL 적용
       })
       .eq("id", selectedUser.id); // 수정할 사용자 ID
@@ -105,6 +110,7 @@ const Card: React.FC = () => {
                 ...user,
                 username,
                 color_desc: colorDesc,
+                color_code: colorCode,
                 profile_picture: imageUrl // 새 이미지 URL 반영
               }
             : user
@@ -114,14 +120,43 @@ const Card: React.FC = () => {
       // 상태 초기화
       setUsername("");
       setColorDesc("");
+      setColorCode("");
       setProfilePicture(null);
+    }
+    alert("수정 완료!");
+  };
+
+  // 사용자 삭제 함수
+  const handleDeleteUser = async (id: string) => {
+    const { error } = await supabase.from("users").delete().eq("id", id);
+
+    if (error) {
+      console.error("Error deleting user:", error);
+    } else {
+      // 삭제 후 유저 리스트 업데이트
+      setUsers(users.filter((user) => user.id !== id));
     }
   };
 
   return (
     <section className="card_wrap">
       {users.map((user) => (
-        <div className="card_container" key={user.id}>
+        <div
+          className={`card_container ${
+            user.job === "엘레멘탈나이트"
+              ? "job_e"
+              : user.job === "다크메이지"
+              ? "job_d"
+              : user.job === "알케믹스팅어"
+              ? "job_a"
+              : user.job === "세인트바드"
+              ? "job_s"
+              : ""
+          }`}
+          key={user.id}
+          onMouseEnter={() => setShowEditButton(user.id)}
+          onMouseLeave={() => setShowEditButton(null)}
+        >
           <div>
             <img
               src={user.profile_picture}
@@ -130,7 +165,7 @@ const Card: React.FC = () => {
             />
             <div className="profile_txt">
               <p>{user.username}</p>
-              <p>엘레멘탈나이트</p>
+              <p>{user.job}</p>
             </div>
             <ul className="color_content">
               <li>
@@ -138,57 +173,81 @@ const Card: React.FC = () => {
                 <span>#{user.color_code}</span> <div className="color" />
               </li>
             </ul>
-            <button
-              onClick={() => {
-                const confirmEdit = window.confirm("수정을 진행하시겠습니까?");
-                if (confirmEdit) {
-                  handleEditClick(user); // 확인 시 수정 클릭 핸들러 호출
-                }
-              }}
-            >
-              수정
-            </button>
           </div>
+
+          {showEditButton === user.id && ( // 조건부 렌더링
+            <>
+              <button
+                className="edit_btn"
+                onClick={() => {
+                  const confirmEdit =
+                    window.confirm("수정을 진행하시겠습니까?");
+                  if (confirmEdit) {
+                    handleEditClick(user); // 확인 시 수정 클릭 핸들러 호출
+                  }
+                }}
+              >
+                수정
+              </button>
+              <button
+                className="delete_btn"
+                onClick={() => handleDeleteUser(user.id)}
+              >
+                삭제
+              </button>
+            </>
+          )}
         </div>
       ))}
       {selectedUser && (
-        <div className="update_modal">
-          <h5>
-            정보를 수정할까? <br />
-            <p>* 수정하지 않으시려면 아무것도 바꾸지 말고 완료를 누르세요!</p>
-          </h5>
+        <>
+          <div className="update_modal">
+            <h5>
+              정보를 수정할까? <br />
+              <p>* 수정하지 않으시려면 아무것도 바꾸지 말고 완료를 누르세요!</p>
+            </h5>
 
-          <label>
-            닉네임:
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </label>
+            <label>
+              닉네임:
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </label>
+            <label>
+              색 코드:
+              <input
+                type="text"
+                value={colorCode}
+                onChange={(e) => setColorCode(e.target.value)}
+              />
+            </label>
 
-          <label>
-            색 이름:
-            <input
-              type="text"
-              value={colorDesc}
-              onChange={(e) => setColorDesc(e.target.value)}
-            />
-          </label>
+            <label>
+              색 이름:
+              <input
+                type="text"
+                value={colorDesc}
+                onChange={(e) => setColorDesc(e.target.value)}
+              />
+            </label>
 
-          <label>
-            프로필 사진:
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files ? e.target.files[0] : null;
-                setProfilePicture(file); // 파일 상태 업데이트
-              }}
-            />
-          </label>
-          <button onClick={handleUpdateUser}>수정 완료</button>
-        </div>
+            <label>
+              프로필 사진:
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files ? e.target.files[0] : null;
+                  setProfilePicture(file); // 파일 상태 업데이트
+                }}
+              />
+            </label>
+            <button onClick={handleUpdateUser}>수정 완료</button>
+          </div>
+          <div className="modal_bg"></div>
+        </>
       )}
     </section>
   );
