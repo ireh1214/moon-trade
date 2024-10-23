@@ -175,18 +175,26 @@ select{
     padding-top: 20px;
 
     .input_box{
-        width: 160px;
+        width: 130px;
+        display: flex;
+        flex-direction: column;
 p{
 margin-bottom: 8px;
 font-size: 14px;
+&:nth-child(3){
+    margin-top: 12px;
 }
-div{
-    margin-top: 8px;
-  input{
+}
+ input{
     width: 100%;
+    min-width: none;
     height: 36px;
-  }
+&::placeholder{
+    color: #ddd;
 }
+  
+  }
+
 
 button{
     padding: 4px 10px;

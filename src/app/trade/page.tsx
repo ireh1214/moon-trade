@@ -21,8 +21,16 @@ const Calculator: React.FC = () => {
   const [increaseTotal, setIncreaseTotal] = useState<boolean>(false);
   const [isRounded, setIsRounded] = useState(false);
   const [savedTotals, setSavedTotals] = useState<number[]>([]);
+  const [petSetPercentage, setPetSetPercentage] = useState<number>(0);
 
   //핸들링 함수 --
+
+  const handlePetSetPercentageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPetSetPercentage(Number(e.target.value));
+  };
+
   const handleQuantityChange = (name: string, quantity: number) => {
     setQuantities((prev) => ({ ...prev, [name]: quantity }));
   };
@@ -142,8 +150,16 @@ const Calculator: React.FC = () => {
         totalWithBonus * certificateAdjustments[selectedCertificate];
     }
 
-    // 전체 금액 15% 증가 반영
-    return increaseTotal ? finalTotal * 1.15 : finalTotal;
+    if (increaseTotal) {
+      finalTotal *= 1.15;
+    }
+
+    // PetSet 퍼센테이지 추가 반영
+    if (petSetPercentage > 0) {
+      finalTotal += finalTotal * (petSetPercentage / 100);
+    }
+
+    return finalTotal;
   };
 
   const displayTotal = isRounded
@@ -218,12 +234,21 @@ const Calculator: React.FC = () => {
 
         <div className="bottom">
           <div className="input_box">
-            <p>추가로 더하기(직접입력):</p>
+            <p>펫 놀이세트 몇퍼?:</p>
+            <input
+              type="number"
+              value={petSetPercentage}
+              onChange={handlePetSetPercentageChange}
+              placeholder="0"
+            />
+
+            <p>추가 더하기(직접입력):</p>
             {bonusValues.map((bonus, index) => (
               <div key={index}>
                 <input
                   type="number"
                   value={bonus}
+                  placeholder="직접입력(덧셈)"
                   onChange={(e) => handleBonusChange(index, e.target.value)}
                   min="0"
                 />
