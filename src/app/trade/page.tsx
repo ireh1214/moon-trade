@@ -31,6 +31,20 @@ const Calculator: React.FC = () => {
     }
   }, []);
 
+  const calculateDaysUntilNextWednesday = () => {
+    const today = new Date();
+    const nextWednesday = new Date();
+    nextWednesday.setDate(
+      today.getDate() + ((3 + 7 - today.getDay()) % 7 || 7)
+    ); // 다음 수요일 날짜 계산
+    const timeDiff = nextWednesday.getTime() - today.getTime();
+    return Math.ceil(timeDiff / (1000 * 3600 * 24)); // 남은 일수 계산
+  };
+
+  const isTodayWednesday = () => {
+    const today = new Date();
+    return today.getDay() === 3; // 3은 수요일
+  };
   //핸들링 함수 --
 
   const handlePetSetPercentageChange = (
@@ -197,11 +211,53 @@ const Calculator: React.FC = () => {
       <Head>
         <title>물물 교역 계산기</title>
       </Head>
-      <div className="trade_wrap">
-        <h1 onClick={alertHandler}>
-          마비노기 물물교역 계산기 <span>/ @LT루니클</span>{" "}
-        </h1>
-        {nickname && <h2>환영합니다, {nickname}님!</h2>}
+      <div
+        className={`trade_wrap ${
+          nickname === "디아스"
+            ? "dias"
+            : nickname === "파미콘"
+            ? "famicon"
+            : nickname === "힐데베르"
+            ? "hildeber"
+            : ""
+        }`}
+      >
+        <div className="top_content">
+          <h1>
+            {" "}
+            마비노기 물물교역 계산기
+            <span onClick={alertHandler}>/ @LT루니클</span>
+          </h1>
+          {nickname && (
+            <p className="nickname">
+              <span>{nickname}</span>님이시군요! 어서오세요!
+            </p>
+          )}
+          <div className="alarm">
+            {["디아스", "파미콘", "힐데베르"].includes(nickname || "") && (
+              <>
+                {isTodayWednesday() ? (
+                  <>
+                    [길드원인증]
+                    <br />
+                    오늘은 물물교환 당일입니다!
+                    <br />몇 시에 할 지 정하셨어요?
+                  </>
+                ) : (
+                  <>
+                    오늘은{" "}
+                    {new Intl.DateTimeFormat("ko-KR", {
+                      weekday: "long"
+                    }).format(new Date())}
+                    입니다. 문페어 물물교환 날까지{" "}
+                    {calculateDaysUntilNextWednesday()}일 남았습니다.
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+
         <div className="section_wrap">
           <ItemGroup
             title="카루 숲 물품"

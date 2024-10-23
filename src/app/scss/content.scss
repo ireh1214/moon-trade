@@ -26,6 +26,7 @@
         margin-bottom: 10px;
     }
 
+    
     nav{
 ul{
     display: flex;
@@ -77,29 +78,76 @@ ul{
     overflow-x: hidden;
     overflow-y: scroll;
     padding: 12px 0 30px;
-    h1{
 
-        font-family: "Gaegu", sans-serif;
-        font-size: 24px;
-        font-weight: 900;
-        letter-spacing: -3px;
-        text-align: center;
-span{
-    font-size: 13px;
-    font-weight: 200;
-    letter-spacing: -1px;
-}
+    .top_content{
+        position: relative;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+        h1{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: "Gaegu", sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -3px;
+            text-align: center;
+    
+            &::before{
+                content:"";
+                display: block;
+                width: 120px;
+                height: 80px;
+                background-image: url("../img/main.png");
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+                margin: 0 auto 5px;
+            }
+            span{
+                font-size: 13px;
+                font-weight: 200;
+                letter-spacing: -1px;
+            }
 
-        &::before{
-            content:"";
-            display: block;
-            width: 90px;
-            height: 90px;
-            background-image: url("../img/main.png");
-            background-size: contain;
-            margin: 0 auto 8px;
         }
+          
+        .nickname{
+            position: absolute;
+            top: 13px;
+            right: -120px;
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-family: "Gaegu", sans-serif;
+            letter-spacing: -3px;
+            background-color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+
+            span{
+                font-family: "Gaegu", sans-serif;
+                letter-spacing: -3px;
+                font-size: 18px;
+                font-weight: 800;
+            }
+        }
+    
+    .alarm{
+        position: absolute;
+        top: 2px;
+        left: -90px;
+        font-size: 16px;
+        font-family: "Gaegu", sans-serif;  
+        letter-spacing: -3px;
+        background-color: #fff;
+        padding: 8px 12px;
+        border-radius: 4px;
+        line-height: 20px;
     }
+    }
+
 
   .section_wrap{
     display: flex;
@@ -285,10 +333,58 @@ button{
     }
   }
 
+
+//   ---조건부
+
+&.dias{
+    background-color: #1a1c26;
+    .top_content{
+        h1{
+            &::before{
+                content:"";
+                background-image: url("../img/logo.png");
+                background-size: contain;
+            }
+        }
+    }
+    *{
+        color: #9ab5ce;
+    }
+
+}
+&.famicon{
+background-color: #ffe8ae;
+.top_content{
+    h1{
+        &::before{
+            content:"";
+            background-image: url("../img/logo.png");
+            background-size: contain;
+        }
+    }
+}
+
+}
+&.hildeber{
+    background: rgb(1,56,98);
+    background: linear-gradient(90deg, rgba(1,56,98,1) 0%, rgba(187,0,0,1) 0%, rgba(224,77,77,1) 55%, rgba(187,2,2,1) 100%);
+    .top_content{
+        h1{
+            &::before{
+                content:"";
+                background-image: url("../img/logo.png");
+                background-size: contain;
+            }
+        }
+    }
+    *{
+        color: #0e1c24;
+    }
+}
 }
 
 @media only screen and (max-width:699px) {
-    .wrap{
+    .trade_wrap{
         padding: 10px 0 10vh;
         h1{
             font-size: 16px;
@@ -296,6 +392,9 @@ button{
                 width: 80px;
                 height: 80px;
 
+            }
+            .nickname{
+                display: none;
             }
         }
     
