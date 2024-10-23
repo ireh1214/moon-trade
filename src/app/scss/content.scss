@@ -109,6 +109,7 @@ ul{
                 font-size: 13px;
                 font-weight: 200;
                 letter-spacing: -1px;
+                margin-top: 6px;
             }
 
         }
@@ -385,8 +386,8 @@ background-color: #ffe8ae;
 
 }
 &.hildeber{
-    background: rgb(1,56,98);
-    background: linear-gradient(90deg, rgba(1,56,98,1) 0%, rgba(187,0,0,1) 0%, rgba(224,77,77,1) 55%, rgba(187,2,2,1) 100%);
+    background: rgb(22,0,0);
+background: linear-gradient(90deg, rgba(22,0,0,1) 0%, rgba(37,1,1,1) 55%, rgba(19,0,0,1) 100%);
     .top_content{
         h1{
             &::before{
@@ -407,7 +408,7 @@ background-color: #ffe8ae;
         }
     }
     *{
-        color: #0e1c24;
+        color: #e5acac;
     }
 }
 }
@@ -418,11 +419,14 @@ background-color: #ffe8ae;
 
         .top_content{
             h1{
-                font-size: 16px;
+                font-size: 18px;
                 &::before{
                     width: 80px;
                     height: 80px;
     
+                }
+                span{
+                    font-size: 11.5px;
                 }
             }
             .alarm, .nickname{
