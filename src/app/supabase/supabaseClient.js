@@ -3,12 +3,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-// const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
-const supabase = createClient(
-  "https://dxtqdjpawmtjurqqigdm.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4dHFkanBhd210anVycXFpZ2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk0NzU3ODgsImV4cCI6MjA0NTA1MTc4OH0.PV3XQL1t4rPxHYROuDQ5dlBUycaGfv5EbGJnyuDOp-g"
-);
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("수퍼베이스 키랑 연결이 안댓네");
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 export default supabase;

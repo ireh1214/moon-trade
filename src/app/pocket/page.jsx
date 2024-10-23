@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Head from "next/head";
 import axios from "axios";
 
 const ItemList = () => {
@@ -65,56 +66,61 @@ const ItemList = () => {
     .filter((tab) => tab.item.length > 0); // 아이템이 있는 탭만 남김
 
   return (
-    <div className="filter_wrap">
-      <section>
-        <h3>주머니</h3>
-        <input
-          type="text"
-          className="color_search"
-          placeholder="색상 코드로 검색해봐"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value.toUpperCase())} // 검색어 상태 업데이트
-        />
-        {filteredItems.map((tab, index) => (
-          <ul className="item_list" key={index}>
-            {tab.item.map((item, itemIndex) => {
-              // URL에서 item_color 부분을 추출하고 디코딩
-              const urlParams = new URLSearchParams(
-                item.image_url.split("?")[1]
-              );
-              const itemColor = JSON.parse(
-                decodeURIComponent(urlParams.get("item_color"))
-              );
+    <>
+      <Head>
+        <title>주머니를 찾아보자</title>
+      </Head>
+      <div className="filter_wrap">
+        <section>
+          <h3>주머니</h3>
+          <input
+            type="text"
+            className="color_search"
+            placeholder="색상 코드로 검색해봐"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value.toUpperCase())} // 검색어 상태 업데이트
+          />
+          {filteredItems.map((tab, index) => (
+            <ul className="item_list" key={index}>
+              {tab.item.map((item, itemIndex) => {
+                // URL에서 item_color 부분을 추출하고 디코딩
+                const urlParams = new URLSearchParams(
+                  item.image_url.split("?")[1]
+                );
+                const itemColor = JSON.parse(
+                  decodeURIComponent(urlParams.get("item_color"))
+                );
 
-              return (
-                <li key={itemIndex}>
-                  <p>{item.item_display_name}</p>
-                  <img src={item.image_url} alt={item.item_display_name} />
-                  <div>
-                    <p>색상 정보:</p>
-                    <ul className="color_list">
-                      {Object.entries(itemColor).map(([key, color]) => {
-                        // 키를 '색상 1', '색상 2'로 변환하는 함수
-                        const colorLabel = key.replace("color_", "색상");
-                        return (
-                          <li key={key} style={{ color }}>
-                            {colorLabel}: {color}
-                            <div
-                              className="bg"
-                              style={{ backgroundColor: color }}
-                            />
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        ))}
-      </section>
-    </div>
+                return (
+                  <li key={itemIndex}>
+                    <p>{item.item_display_name}</p>
+                    <img src={item.image_url} alt={item.item_display_name} />
+                    <div>
+                      <p>색상 정보:</p>
+                      <ul className="color_list">
+                        {Object.entries(itemColor).map(([key, color]) => {
+                          // 키를 '색상 1', '색상 2'로 변환하는 함수
+                          const colorLabel = key.replace("color_", "색상");
+                          return (
+                            <li key={key} style={{ color }}>
+                              {colorLabel}: {color}
+                              <div
+                                className="bg"
+                                style={{ backgroundColor: color }}
+                              />
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          ))}
+        </section>
+      </div>
+    </>
   );
 };
 

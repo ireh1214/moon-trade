@@ -181,7 +181,6 @@ const Card: React.FC = () => {
               <p>{user.job}</p>
             </div>
             <ul className="color_content">
-              <li> 지향색: </li>
               {Array.isArray(user.colors) && user.colors.length > 0 ? (
                 user.colors.map((color, index) => (
                   <li key={index}>

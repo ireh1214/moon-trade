@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./scss/common.scss";
 
 export const metadata: Metadata = {
-  title: "물교 계산기",
-  description: "우리 모두 부자가 되자"
+  title: "MOONPAIR",
+  description: ""
 };
 
 export default function RootLayout({
