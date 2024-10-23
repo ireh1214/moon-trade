@@ -1,6 +1,6 @@
 // Calculator.tsx
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import items from "../items";
 import ItemGroup from "../ItemGroup";
 import Head from "next/head";
@@ -22,6 +22,14 @@ const Calculator: React.FC = () => {
   const [isRounded, setIsRounded] = useState(false);
   const [savedTotals, setSavedTotals] = useState<number[]>([]);
   const [petSetPercentage, setPetSetPercentage] = useState<number>(0);
+  const [nickname, setNickname] = useState<string | null>(null); // 닉네임 상태 추가
+
+  useEffect(() => {
+    const userNickname = prompt("당신의 닉네임은 무엇인가요?");
+    if (userNickname) {
+      setNickname(userNickname); // 입력받은 닉네임 상태에 저장
+    }
+  }, []);
 
   //핸들링 함수 --
 
@@ -193,6 +201,7 @@ const Calculator: React.FC = () => {
         <h1 onClick={alertHandler}>
           마비노기 물물교역 계산기 <span>/ @LT루니클</span>{" "}
         </h1>
+        {nickname && <h2>환영합니다, {nickname}님!</h2>}
         <div className="section_wrap">
           <ItemGroup
             title="카루 숲 물품"
