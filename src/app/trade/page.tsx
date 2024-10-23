@@ -238,9 +238,9 @@ const Calculator: React.FC = () => {
               <>
                 {isTodayWednesday() ? (
                   <>
-                    [길드원인증]
+                    <span>[ 길드원인증 ]</span>
                     <br />
-                    오늘은 물물교환 당일입니다!
+                    오늘은 물물교역 당일입니다!
                     <br />몇 시에 할 지 정하셨어요?
                   </>
                 ) : (
@@ -249,7 +249,7 @@ const Calculator: React.FC = () => {
                     {new Intl.DateTimeFormat("ko-KR", {
                       weekday: "long"
                     }).format(new Date())}
-                    입니다. 문페어 물물교환 날까지{" "}
+                    입니다. 문페어 물물교역 날까지{" "}
                     {calculateDaysUntilNextWednesday()}일 남았습니다.
                   </>
                 )}

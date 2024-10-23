@@ -145,6 +145,10 @@ ul{
         padding: 8px 12px;
         border-radius: 4px;
         line-height: 20px;
+        span{
+            font-size: 12px;
+            letter-spacing: 0px;
+        }
     }
     }
 
@@ -347,6 +351,11 @@ button{
             }
         }
     }
+    .nickname{
+        span{
+    color: #1c4bd7;
+        }
+    }
     *{
         color: #9ab5ce;
     }
@@ -362,6 +371,16 @@ background-color: #ffe8ae;
             background-size: contain;
         }
     }
+    .nickname{
+        span{
+    color: #e78300;
+        }
+    }
+
+}
+
+*{
+    color: #331206;
 }
 
 }
@@ -375,6 +394,16 @@ background-color: #ffe8ae;
                 background-image: url("../img/logo.png");
                 background-size: contain;
             }
+            .nickname{
+                span{
+            color: #e78300;
+                }
+            }
+        }
+        .nickname{
+            span{
+        color: #ff5f37;
+            }
         }
     }
     *{
@@ -386,14 +415,17 @@ background-color: #ffe8ae;
 @media only screen and (max-width:699px) {
     .trade_wrap{
         padding: 10px 0 10vh;
-        h1{
-            font-size: 16px;
-            &::before{
-                width: 80px;
-                height: 80px;
 
+        .top_content{
+            h1{
+                font-size: 16px;
+                &::before{
+                    width: 80px;
+                    height: 80px;
+    
+                }
             }
-            .nickname{
+            .alarm, .nickname{
                 display: none;
             }
         }
