@@ -139,26 +139,25 @@ const Calculator: React.FC = () => {
 
   //계산식 함수 --
   const calculateTotal = () => {
-    // 기본 가격 계산
+    // 기본 가격 계산 (item.price 제거)
     const baseTotal = items.reduce(
       (total, item) =>
         total +
-        quantities[item.name] *
-          (item.price + (regionalPriceAdjustments[item.name] || 0)),
+        quantities[item.name] * (regionalPriceAdjustments[item.name] || 0),
       0
     );
-
+  
     // 보너스 값 합산
     const totalBonus = bonusValues.reduce(
       (total, bonus) => total + (bonus ? Number(bonus) : 0),
       0
     );
-
+  
     const totalWithBonus = baseTotal + totalBonus;
-
+  
     // 보증서 선택에 따른 금액 조정
     let finalTotal = totalWithBonus;
-
+  
     const certificateAdjustments: { [key: string]: number } = {
       A: 0, // 추가 없음
       B: 0.45, // 45% 증가
@@ -166,23 +165,24 @@ const Calculator: React.FC = () => {
       D: 0.75, // 75% 증가
       E: 1.5 // 150% 증가
     };
-
+  
     if (selectedCertificate && selectedCertificate !== "A") {
       finalTotal +=
         totalWithBonus * certificateAdjustments[selectedCertificate];
     }
-
+  
     if (increaseTotal) {
       finalTotal *= 1.15;
     }
-
-    // PetSet 퍼센테이지 추가 반영
+  
+    // PetSet 퍼센트 추가 반영
     if (petSetPercentage > 0) {
       finalTotal += finalTotal * (petSetPercentage / 100);
     }
-
+  
     return finalTotal;
   };
+  
 
   const displayTotal = isRounded
     ? Math.floor(calculateTotal()) // 소수점 제거
