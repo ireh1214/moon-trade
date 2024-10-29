@@ -43,7 +43,7 @@ const ItemList = () => {
 
   // 데이터가 아직 로드되지 않았을 때의 로딩 상태 처리
   if (shopData.length === 0) {
-    return <div>Loading...</div>; // shopData가 비어있으면 로딩 메시지 표시
+    return <div>Loading... (api가 터졌어요)</div>; // shopData가 비어있으면 로딩 메시지 표시
   }
 
   // tab_name이 "주머니"인 탭만 필터링
