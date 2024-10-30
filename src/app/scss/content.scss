@@ -28,6 +28,7 @@
 
     
     nav{
+        padding: 0px 20px;
 ul{
     display: flex;
     flex-wrap: wrap;
@@ -41,6 +42,7 @@ ul{
     letter-spacing: -1.5px;
     transition: 0.4s ease;
     font-size: 17px;
+    text-shadow: #fff 1px 0 10px;
 
     &::before{
         content:"";
