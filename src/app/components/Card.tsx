@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
 import supabase from "../supabase/supabaseClient";
+import { useRouter } from "next/navigation";
 import { PostgrestError } from "@supabase/postgrest-js";
 
 // User 타입 정의
@@ -19,6 +21,7 @@ interface User {
 
 const Card: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const router = useRouter();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [username, setUsername] = useState<string>("");
   const [userJob, setUserJob] = useState<string>("");
@@ -169,6 +172,7 @@ const Card: React.FC = () => {
           key={user.id}
           onMouseEnter={() => setShowEditButton(user.id)}
           onMouseLeave={() => setShowEditButton(null)}
+          onClick={() => router.push(`/favcolor/user/${user.id}`)}
         >
           <div>
             <img
