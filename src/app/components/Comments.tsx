@@ -25,6 +25,7 @@ const Comments: React.FC<{ userId: string | null }> = ({ userId }) => {
     const { data, error } = await supabase
       .from("comments")
       .select("*")
+      .eq("user_id", userId) // 현재 페이지의 userId로 필터링
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -40,7 +41,7 @@ const Comments: React.FC<{ userId: string | null }> = ({ userId }) => {
     if (editId === null) {
       const { error } = await supabase
         .from("comments")
-        .insert([{ nickname, text, user_id: userId }]);
+        .insert([{ nickname, text, user_id: userId }]); // userId 추가
 
       if (error) {
         console.error("Error adding comment:", error);
@@ -75,7 +76,6 @@ const Comments: React.FC<{ userId: string | null }> = ({ userId }) => {
     setWriteComment(true);
   };
 
-  // 수정 취소 기능
   const handleCancelEdit = () => {
     setEditId(null); // 수정 모드 해제
     setNickname(""); // 닉네임 초기화
@@ -85,15 +85,14 @@ const Comments: React.FC<{ userId: string | null }> = ({ userId }) => {
 
   const handleDeleteComment = async (id: number) => {
     const confirmDelete = window.confirm("정말 삭제하시겠어요?");
-
-    if (!confirmDelete) return; // 사용자가 취소를 누르면 함수 종료
+    if (!confirmDelete) return;
 
     const { error } = await supabase.from("comments").delete().eq("id", id);
 
     if (error) {
       console.error("Error deleting comment:", error);
     } else {
-      fetchComments(); // 삭제 후 댓글 목록 갱신
+      fetchComments();
     }
   };
 

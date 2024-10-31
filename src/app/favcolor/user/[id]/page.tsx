@@ -103,7 +103,7 @@ const UserDetail: React.FC<{ params: { id: string } }> = ({ params }) => {
                 <button onClick={handleUpdateConcepts}>수정완료</button>
               </div>
             )}
-            <Comments userId={null} />
+            <Comments userId={user ? user.id : null} />
           </>
         )}
       </section>
