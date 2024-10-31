@@ -33,7 +33,9 @@ const WeeklySchedule: React.FC = () => {
     empty: "",
     detail: ""
   });
-  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState<boolean>(
+    typeof window !== "undefined" && window.innerWidth <= 768
+  );
   const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
     null
@@ -111,6 +113,8 @@ const WeeklySchedule: React.FC = () => {
 
   // 화면 크기 변경 감지
   useEffect(() => {
+    if (typeof window === "undefined") return; // 서버 측 렌더링 방지
+
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

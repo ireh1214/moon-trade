@@ -75,8 +75,6 @@ ul{
 
     }
 }
-
-
 .trade_wrap{
     display: flex;
     flex-direction: column;
@@ -420,7 +418,6 @@ background: linear-gradient(90deg, rgba(22,0,0,1) 0%, rgba(37,1,1,1) 55%, rgba(1
     }
 }
 }
-
 @media only screen and (max-width:699px) {
     .trade_wrap{
         padding: 10px 0 10vh;
@@ -1267,9 +1264,7 @@ table{
 }
 }
 
-
 @media only screen and (max-width: 768px){
-
     .schedule_wrap{
         padding-bottom: 100px;
 
