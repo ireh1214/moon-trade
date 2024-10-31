@@ -172,7 +172,7 @@ const Card: React.FC = () => {
           key={user.id}
           onMouseEnter={() => setShowEditButton(user.id)}
           onMouseLeave={() => setShowEditButton(null)}
-          onClick={() => router.push(`/favcolor/user/${user.id}`)}
+          onDoubleClick={() => router.push(`/favcolor/user/${user.id}`)}
         >
           <div>
             <img
