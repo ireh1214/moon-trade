@@ -1,6 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import supabase from "../supabase/supabaseClient";
+
+interface Schedule {
+  id: number;
+  day: string;
+  time: string;
+  event: string;
+  friend: string;
+  empty: string;
+  detail?: string;
+}
 
 const days = [
   "일요일",
@@ -12,41 +23,33 @@ const days = [
   "토요일"
 ];
 
-interface Schedule {
-  id: number;
-  day: string;
-  time: string;
-  event: string;
-  friend: string; // 'member'를 'friend'로 변경
-  empty: string; // 'empty'를 string으로 변경
-}
-
 const WeeklySchedule: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [newSchedule, setNewSchedule] = useState({
     day: days[0],
     time: "",
     event: "",
-    friend: "", // 'member'를 'friend'로 변경
-    empty: "" // 'empty'를 추가
+    friend: "",
+    empty: "",
+    detail: ""
   });
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
   const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
-  const [selectedFriends, setSelectedFriends] = useState<string[]>([]); // 선택된 친구 상태 추가
-  const [detailVisible, setDetailVisible] = useState(false); // 상세보기 상태 추가
+  const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
+    null
+  );
 
-  // 데이터베이스에서 데이터를 가져오는 함수 (Read)
   const fetchSchedules = async () => {
     const { data, error } = await supabase.from("schedule").select("*");
     if (error) console.error(error);
     else setSchedules(data as Schedule[]);
   };
 
-  // 스케줄 추가 함수 (Create)
   const createSchedule = async () => {
-    const { day, time, event, friend, empty } = newSchedule; // 'member'를 'friend'로 변경
+    const { day, time, event, friend, empty, detail } = newSchedule;
     const { error } = await supabase
       .from("schedule")
-      .insert([{ day, time, event, friend, empty }]); // 'member'를 'friend'로 변경
+      .insert([{ day, time, event, friend, empty, detail }]);
     if (error) {
       console.error("Error adding schedule:", error.message);
     } else {
@@ -56,48 +59,62 @@ const WeeklySchedule: React.FC = () => {
         time: "",
         event: "",
         friend: "",
-        empty: ""
-      }); // 초기화
+        empty: "",
+        detail: ""
+      });
     }
   };
 
-  // 스케줄 수정 함수 (Update)
   const updateSchedule = async () => {
     if (!editingSchedule) return;
-    const { id, day, time, event, friend, empty } = editingSchedule; // 'member'를 'friend'로 변경
+    const { id, day, time, event, friend, empty, detail } = editingSchedule;
     const { error } = await supabase
       .from("schedule")
-      .update({ day, time, event, friend, empty }) // 'member'를 'friend'로 변경
+      .update({ day, time, event, friend, empty, detail })
       .eq("id", id);
     if (error) {
       console.error("Error updating schedule:", error.message);
     } else {
       fetchSchedules();
       setEditingSchedule(null);
+      setSelectedSchedule(null); // 수정 후 선택 해제
     }
   };
 
-  // 스케줄 삭제 함수 (Delete)
   const deleteSchedule = async (id: number) => {
     const { error } = await supabase.from("schedule").delete().eq("id", id);
     if (error) {
       console.error("Error deleting schedule:", error.message);
     } else {
       fetchSchedules();
+      setSelectedSchedule(null); // 삭제 후 선택 해제
     }
   };
 
-  // 참여자 추가 핸들러
-  const handleFriendClick = (friend: string) => {
-    if (selectedFriends.includes(friend)) {
-      // 친구가 이미 선택되어 있으면 제거
-      setSelectedFriends((prev) => prev.filter((f) => f !== friend));
-    } else {
-      // 친구가 선택되지 않았으면 추가
-      setSelectedFriends((prev) => [...prev, friend]);
-    }
-    setDetailVisible(!detailVisible); // 클릭할 때마다 상세보기 토글
+  const handleFriendClick = (schedule: Schedule) => {
+    setSelectedSchedule((prev) => (prev?.id === schedule.id ? null : schedule));
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".schedule_wrap")) {
+        setSelectedSchedule(null); // table 외부 클릭 시 선택 해제
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // 화면 크기 변경 감지
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     fetchSchedules();
@@ -106,7 +123,7 @@ const WeeklySchedule: React.FC = () => {
   return (
     <div className="schedule_wrap">
       <div className="title_box">
-        <h3>스케줄 ver1.0.0</h3>
+        <h3>스케줄 ver1.0.5</h3>
       </div>
       <div className="option_box">
         <select
@@ -169,16 +186,32 @@ const WeeklySchedule: React.FC = () => {
           }}
         />
         <input
-          type="text" // 'empty'를 문자열 입력 필드로 변경
+          type="text"
           className="input_empty"
           placeholder="모자란 인원"
           value={editingSchedule ? editingSchedule.empty : newSchedule.empty}
           onChange={(e) => {
-            const value = e.target.value; // 입력값을 문자열로 설정
+            const value = e.target.value;
             if (editingSchedule) {
               setEditingSchedule({ ...editingSchedule, empty: value });
             } else {
               setNewSchedule({ ...newSchedule, empty: value });
+            }
+          }}
+        />
+        <input
+          type="text"
+          className="input_detail"
+          placeholder="추가 설명(안써도됨)"
+          value={
+            editingSchedule ? editingSchedule.detail || "" : newSchedule.detail
+          }
+          onChange={(e) => {
+            const value = e.target.value;
+            if (editingSchedule) {
+              setEditingSchedule({ ...editingSchedule, detail: value });
+            } else {
+              setNewSchedule({ ...newSchedule, detail: value });
             }
           }}
         />
@@ -188,82 +221,107 @@ const WeeklySchedule: React.FC = () => {
           <button onClick={createSchedule}>추가하기</button>
         )}
       </div>
+      {isMobile ? (
+        days.map((day) => (
+          <div key={day} className="day_schedule_mo">
+            <em>{day}</em>
+            <ul>
+              {schedules
+                .filter((schedule) => schedule.day === day)
+                .sort((a, b) => {
+                  const parseTime = (time: string) => {
+                    const isPM = time.includes("오후");
+                    let hour = parseInt(time.replace(/[^0-9]/g, ""), 10);
+                    if (isPM && hour !== 12) hour += 12;
+                    if (!isPM && hour === 12) hour = 0;
+                    return hour;
+                  };
+                  return parseTime(a.time) - parseTime(b.time);
+                })
+                .map((schedule) => (
+                  <li key={schedule.id} className="time_entry">
+                    <p>
+                      {schedule.time} / {schedule.event}
+                    </p>
+                    <p>🐶 참여하는 길드원: {schedule.friend}</p>
+                    <p>❗ 공석: {schedule.empty}</p>
+                    {schedule.detail && <p>🗨 설명: {schedule.detail}</p>}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              {days.map((day) => (
+                <th key={day}>{day}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {days.map((day) => (
+                <td key={day}>
+                  {schedules
+                    .filter((schedule) => schedule.day === day)
+                    .sort((a, b) => {
+                      const parseTime = (time: string) => {
+                        const isPM = time.includes("오후");
+                        let hour = parseInt(time.replace(/[^0-9]/g, ""), 10);
+                        if (isPM && hour !== 12) hour += 12;
+                        if (!isPM && hour === 12) hour = 0;
+                        return hour;
+                      };
+                      return parseTime(a.time) - parseTime(b.time);
+                    })
+                    .map((schedule) => (
+                      <div
+                        key={schedule.id}
+                        className="value"
+                        onClick={() => handleFriendClick(schedule)}
+                      >
+                        <p className="time_value">{schedule.time}</p>
+                        {schedule.event.split("\n").map((line, index) => (
+                          <p
+                            key={index}
+                            className="event_value"
+                            dangerouslySetInnerHTML={{
+                              __html: line.replace(/(\\n)/g, "<br />")
+                            }}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      )}
 
-      <table>
-        <thead>
-          <tr>
-            {days.map((day) => (
-              <th key={day}>{day}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {days.map((day) => (
-              <td key={day}>
-                {schedules
-                  .filter((schedule) => schedule.day === day)
-                  .sort((a, b) => {
-                    const parseTime = (time: string) => {
-                      const isPM = time.includes("오후");
-                      let hour = parseInt(time.replace(/[^0-9]/g, ""), 10);
-                      if (isPM && hour !== 12) hour += 12;
-                      if (!isPM && hour === 12) hour = 0;
-                      return hour;
-                    };
-                    return parseTime(a.time) - parseTime(b.time);
-                  })
-                  .map((schedule) => (
-                    <div
-                      key={schedule.id}
-                      className="value"
-                      onClick={() => handleFriendClick(schedule.friend)}
-                    >
-                      <p className="time_value">{schedule.time}</p>
-                      {schedule.event.split("\n").map((line, index) => (
-                        <p
-                          key={index}
-                          className="event_value"
-                          dangerouslySetInnerHTML={{
-                            __html: line.replace(/(\\n)/g, "<br />")
-                          }}
-                        />
-                      ))}
-                      {/* 참여자 출력 */}
-                      {selectedFriends.includes(schedule.friend) && ( // 선택된 친구일 때만 btn_box 보여줌
-                        <div className="btn_box">
-                          <button onClick={() => setEditingSchedule(schedule)}>
-                            수정
-                          </button>
-                          <button onClick={() => deleteSchedule(schedule.id)}>
-                            삭제
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
-
-      {detailVisible && selectedFriends.length > 0 && (
+      {selectedSchedule && (
         <div className="detail_value">
-          <div>
-            <span>참여하는 길드원:</span>
-            {selectedFriends.map((friend, index) => (
-              <p key={index}>{friend}</p>
-            ))}
+          <div className="desc">
+            <span>🗨 설명:</span>
+            <p>{selectedSchedule.detail}</p>
           </div>
           <div>
-            <span>공석:</span>
-            {
-              schedules
-                .filter((schedule) => selectedFriends.includes(schedule.friend))
-                .reduce((acc, schedule) => acc + schedule.empty, "") // 문자열을 그대로 합산
-            }
-            명
+            <span>🐶 참여하는 길드원:</span>
+            <p>{selectedSchedule.friend}</p>
+          </div>
+          <div>
+            <span>❗ 공석:</span>
+            <p>{selectedSchedule.empty}</p>
+          </div>
+          <div className="btn_box">
+            <button onClick={() => setEditingSchedule(selectedSchedule)}>
+              수정
+            </button>
+            <button onClick={() => deleteSchedule(selectedSchedule.id)}>
+              삭제
+            </button>
           </div>
         </div>
       )}
