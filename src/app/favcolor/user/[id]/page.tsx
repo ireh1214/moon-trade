@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import supabase from "../../../supabase/supabaseClient";
-// import Comments from "@/app/components/Comments";
+import Comments from "@/app/components/Comments";
 
 // Color 및 Concept 타입 정의
 interface Color {
@@ -67,32 +67,32 @@ const UserDetail: React.FC<{ params: { id: string } }> = ({ params }) => {
       <section>
         {user && (
           <>
-            <div className="profile">
-              <h5>
-                <span> {user.username}</span> | {user.job}
-              </h5>
-              <div
-                className="img_box"
-                style={{ backgroundImage: `url(${user.profile_picture})` }}
-                aria-label={user.username} // 접근성을 위한 label 추가
-              ></div>
+            <div className="frame">
+              <div className="profile">
+                <h5>
+                  <span> {user.username}</span> | {user.job}
+                </h5>
+                <div
+                  className="img_box"
+                  style={{ backgroundImage: `url(${user.profile_picture})` }}
+                  aria-label={user.username} // 접근성을 위한 label 추가
+                ></div>
+              </div>
+              <div className="concept">
+                <p>밀레시안 설정 🖊️</p>
+
+                <div
+                  className="value"
+                  dangerouslySetInnerHTML={{
+                    __html: user.concept.replace(/\n/g, "<br/>")
+                  }}
+                />
+                <button type="button" onClick={() => setIsEditing(!isEditing)}>
+                  {/* 수정 모드 토글 */}
+                  {isEditing ? "취소" : "수정하기"}
+                </button>
+              </div>
             </div>
-
-            <div className="concept">
-              <p>밀레시안 설정 🖊️</p>
-
-              <div
-                className="value"
-                dangerouslySetInnerHTML={{
-                  __html: user.concept.replace(/\n/g, "<br/>")
-                }}
-              />
-              <button type="button" onClick={() => setIsEditing(!isEditing)}>
-                {/* 수정 모드 토글 */}
-                {isEditing ? "취소" : "수정하기"}
-              </button>
-            </div>
-
             {isEditing && ( // 수정 모드일 때만 edit_value 렌더링
               <div className="edit_value">
                 <textarea
@@ -103,7 +103,7 @@ const UserDetail: React.FC<{ params: { id: string } }> = ({ params }) => {
                 <button onClick={handleUpdateConcepts}>수정완료</button>
               </div>
             )}
-            {/* <Comments userId={null} /> */}
+            <Comments userId={null} />
           </>
         )}
       </section>

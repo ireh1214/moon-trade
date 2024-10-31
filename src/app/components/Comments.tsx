@@ -13,10 +13,9 @@ const Comments: React.FC<{ userId: string | null }> = ({ userId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [nickname, setNickname] = useState("");
   const [text, setText] = useState("");
-  const [password, setPassword] = useState("");
   const [editId, setEditId] = useState<number | null>(null);
-  const [editPassword, setEditPassword] = useState("");
   const [error, setError] = useState("");
+  const [writeComment, setWriteComment] = useState(false);
 
   useEffect(() => {
     fetchComments();
@@ -35,102 +34,123 @@ const Comments: React.FC<{ userId: string | null }> = ({ userId }) => {
     }
   };
 
-  const handleAddComment = async () => {
+  const handleAddOrEditComment = async () => {
     if (!nickname || !text) return;
 
-    const { error } = await supabase
-      .from("comments")
-      .insert([{ nickname, text, user_id: userId }]);
+    if (editId === null) {
+      const { error } = await supabase
+        .from("comments")
+        .insert([{ nickname, text, user_id: userId }]);
 
-    if (error) {
-      console.error("Error adding comment:", error);
+      if (error) {
+        console.error("Error adding comment:", error);
+      } else {
+        setNickname("");
+        setText("");
+        fetchComments();
+      }
+      alert("덧글 쓰기가 완료되었어요!");
     } else {
-      setNickname("");
-      setText("");
-      fetchComments(); // 새 댓글 추가 후 댓글 목록 갱신
+      const { error } = await supabase
+        .from("comments")
+        .update({ nickname, text })
+        .eq("id", editId);
+
+      if (error) {
+        console.error("Error editing comment:", error);
+      } else {
+        setEditId(null);
+        setNickname("");
+        setText("");
+        fetchComments();
+      }
+      alert("덧글 수정이 완료되었습니다!");
     }
   };
 
-  const handleEditComment = async (id: number) => {
-    if (editPassword !== password) {
-      setError("비밀번호가 틀립니다.");
-      return;
-    }
+  const handleEditClick = (comment: Comment) => {
+    setEditId(comment.id);
+    setNickname(comment.nickname);
+    setText(comment.text);
+    setWriteComment(true);
+  };
 
-    const { error } = await supabase
-      .from("comments")
-      .update({ text })
-      .eq("id", id);
-
-    if (error) {
-      console.error("Error editing comment:", error);
-    } else {
-      setEditId(null); // 수정 모드 종료
-      setPassword(""); // 비밀번호 초기화
-      fetchComments(); // 댓글 목록 갱신
-    }
+  // 수정 취소 기능
+  const handleCancelEdit = () => {
+    setEditId(null); // 수정 모드 해제
+    setNickname(""); // 닉네임 초기화
+    setText(""); // 텍스트 초기화
+    setError(""); // 에러 메시지 초기화
   };
 
   const handleDeleteComment = async (id: number) => {
-    if (editPassword !== password) {
-      setError("비밀번호가 틀립니다.");
-      return;
-    }
+    const confirmDelete = window.confirm("정말 삭제하시겠어요?");
+
+    if (!confirmDelete) return; // 사용자가 취소를 누르면 함수 종료
 
     const { error } = await supabase.from("comments").delete().eq("id", id);
 
     if (error) {
       console.error("Error deleting comment:", error);
     } else {
-      fetchComments(); // 댓글 목록 갱신
+      fetchComments(); // 삭제 후 댓글 목록 갱신
     }
   };
 
   return (
-    <div>
-      <h2>댓글</h2>
+    <div className="comment_wrap">
       {comments.map((comment) => (
-        <div key={comment.id}>
-          <p>
-            {comment.nickname}: {comment.text}
-          </p>
-          <button
-            onClick={() => {
-              setEditId(comment.id);
-              setText(comment.text);
-            }}
-          >
-            수정
-          </button>
-          <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
+        <div key={comment.id} className="content">
+          <ul>
+            <li className="name">
+              <span>{comment.nickname}</span>
+              <div className="btn_box">
+                <button onClick={() => handleEditClick(comment)}>수정</button>
+                <button onClick={() => handleDeleteComment(comment.id)}>
+                  삭제
+                </button>
+              </div>
+            </li>
+            <li>{comment.text}</li>
+          </ul>
         </div>
       ))}
+      <button
+        type="button"
+        onClick={() => setWriteComment(!writeComment)}
+        className="write"
+      >
+        덧글쓰자
+      </button>
 
-      <input
-        type="text"
-        placeholder="닉네임"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-      />
-      <textarea
-        placeholder="댓글 입력"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      <button onClick={handleAddComment}>댓글 추가</button>
+      {writeComment && (
+        <div className="write_value">
+          <div>
+            <label>닉네임</label>
+            <input
+              type="text"
+              placeholder="닉네임"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+            />
+          </div>
 
-      {editId !== null && (
-        <div>
-          <input
-            type="password"
-            placeholder="비밀번호 입력"
-            value={editPassword}
-            onChange={(e) => setEditPassword(e.target.value)}
+          <textarea
+            placeholder="댓글 입력"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
           />
-          <button onClick={() => handleEditComment(editId)}>수정 완료</button>
+          <button onClick={handleAddOrEditComment}>
+            {editId === null ? "댓글 추가" : "수정 완료"}
+          </button>
+          {editId !== null && (
+            <button type="button" className="cancel" onClick={handleCancelEdit}>
+              취소
+            </button>
+          )}
+          {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
       )}
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };

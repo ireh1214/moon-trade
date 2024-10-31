@@ -1352,6 +1352,11 @@ table{
     *{
         font-family: 'YanoljaYacheR';
     }
+.frame{
+    background-image: url("../img/frame2.png");
+    background-size: 400px 700px;
+    background-repeat: no-repeat;
+    background-position: center;
 
     .profile{
         display: flex;
@@ -1372,7 +1377,7 @@ table{
             }
         }
         .img_box{
-            width: 350px;
+            width: 340px;
             height: 280px;
             border-radius: 10px;
             margin: 0 auto;
@@ -1388,7 +1393,7 @@ table{
         margin-top: 20px;
 
         .value{
-            font-size: 18px;
+            font-size: 20px;
             padding: 8px;
             border: 1px solid #eee;
             width: 100%;
@@ -1402,6 +1407,8 @@ button{
     margin-left: auto;
 }
     }
+}
+
 
 .edit_value{
     display: flex;
@@ -1422,4 +1429,91 @@ button{
         margin-left: auto;
     }
 }
+}
+
+.comment_wrap{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 100px 0 80px;
+    border-top: 1px solid #ccc;
+
+    *{
+        box-sizing: border-box;
+    }
+
+    .content{
+        display: flex;
+        padding: 30px;
+        border-bottom: 1px solid #ccc;
+        &:last-child{
+            border-bottom: none;
+        }
+
+        ul{
+            display: flex;
+            flex-direction: column;
+            gap:4px;
+            li{
+                &.name{
+                    display: flex;
+                    align-items: center;
+                    font-size: 19px;
+                    font-weight: 700;
+
+                    .btn_box{
+                        display: flex;
+                        margin-left: 14px;
+                        button{
+                            color: #aaa;
+                            padding: 0px 4px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .write{
+        background-color: #ccc;
+        margin-left: auto;
+    }
+
+    .write_value{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+ &>div{
+    display: flex;
+    align-items: center;
+    gap:4px;
+    margin: 36px 0 6px;
+
+    input{
+        border: 1px solid #ccc;
+        width: 100px;
+        &::placeholder{
+            color: #ccc;
+        }
+    }
+ }
+ textarea{
+    border: 1px solid #ddd;
+    resize: none;
+    width: 100%;
+    height: 54px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+
+ }
+ button{
+    background-color: #000;
+    color: #fff;
+    padding: 4px 0;
+    &.cancel{
+        background-color: #fff;
+        text-align: right;
+        color: #aaa;
+    }
+ }
+    }
 }
