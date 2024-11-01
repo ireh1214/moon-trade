@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import supabase from "../supabase/supabaseClient";
+import BackButton from "../components/BakButton";
 
 interface Schedule {
   id: number;
@@ -126,6 +127,7 @@ const WeeklySchedule: React.FC = () => {
 
   return (
     <div className="schedule_wrap">
+      <BackButton />
       <div className="title_box">
         <h3>스케줄 ver1.0.5</h3>
       </div>

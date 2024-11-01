@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import AddUserModal from "../components/AddUserModal";
 import Card from "../components/Card";
+import BackButton from "../components/BakButton";
 
 const Page: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,7 +11,9 @@ const Page: React.FC = () => {
 
   return (
     <div className="color_wrap">
-      <h3 className="title">MoonPair</h3>
+      <div className="title">
+        <BackButton />
+     </div>
       <Card />
       {isModalOpen && (
         <AddUserModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
