@@ -124,6 +124,7 @@ const WeeklySchedule: React.FC = () => {
   useEffect(() => {
     fetchSchedules();
   }, []);
+  
 
   return (
     <div className="schedule_wrap">
